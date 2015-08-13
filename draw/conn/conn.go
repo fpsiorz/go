@@ -2,7 +2,7 @@ package conn
 
 import "image"
 
-type Conn interface {
+type Interface interface {
 	BounceMouse(m *Mouse) error
 	Close() error
 	Cursor(cursor *Cursor) error

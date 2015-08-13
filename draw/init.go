@@ -21,7 +21,7 @@ import (
 // A Display represents a connection to a display.
 type Display struct {
 	mu      sync.Mutex // See comment above.
-	conn    conn.Conn
+	conn    conn.Interface
 	errch   chan<- error
 	bufsize int
 	buf     []byte
