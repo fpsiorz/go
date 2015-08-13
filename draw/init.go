@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 
+	"9fans.net/go/draw/conn"
 	"9fans.net/go/draw/devdraw"
 )
 
@@ -20,7 +21,7 @@ import (
 // A Display represents a connection to a display.
 type Display struct {
 	mu      sync.Mutex // See comment above.
-	conn    *devdraw.Conn
+	conn    conn.Conn
 	errch   chan<- error
 	bufsize int
 	buf     []byte
