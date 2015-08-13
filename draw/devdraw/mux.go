@@ -1,4 +1,4 @@
-package drawfcall
+package devdraw
 
 import (
 	"fmt"
@@ -7,6 +7,8 @@ import (
 	"os"
 	"os/exec"
 	"sync"
+
+	"9fans.net/go/draw/conn"
 )
 
 type Conn struct {
@@ -139,7 +141,7 @@ func (c *Conn) Init(label, winsize string) error {
 	return c.RPC(tx, rx)
 }
 
-func (c *Conn) ReadMouse() (m Mouse, resized bool, err error) {
+func (c *Conn) ReadMouse() (m conn.Mouse, resized bool, err error) {
 	tx := &Msg{Type: Trdmouse}
 	rx := &Msg{}
 	if err = c.RPC(tx, rx); err != nil {
@@ -161,12 +163,12 @@ func (c *Conn) ReadKbd() (r rune, err error) {
 }
 
 func (c *Conn) MoveTo(p image.Point) error {
-	tx := &Msg{Type: Tmoveto, Mouse: Mouse{Point: p}}
+	tx := &Msg{Type: Tmoveto, Mouse: conn.Mouse{Point: p}}
 	rx := &Msg{}
 	return c.RPC(tx, rx)
 }
 
-func (c *Conn) Cursor(cursor *Cursor) error {
+func (c *Conn) Cursor(cursor *conn.Cursor) error {
 	tx := &Msg{Type: Tcursor}
 	if cursor == nil {
 		tx.Arrow = true
@@ -177,7 +179,7 @@ func (c *Conn) Cursor(cursor *Cursor) error {
 	return c.RPC(tx, rx)
 }
 
-func (c *Conn) BounceMouse(m *Mouse) error {
+func (c *Conn) BounceMouse(m *conn.Mouse) error {
 	tx := &Msg{Type: Tbouncemouse, Mouse: *m}
 	rx := &Msg{}
 	return c.RPC(tx, rx)

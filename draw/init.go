@@ -9,7 +9,7 @@ import (
 	"strings"
 	"sync"
 
-	"9fans.net/go/draw/drawfcall"
+	"9fans.net/go/draw/devdraw"
 )
 
 // Display locking:
@@ -20,7 +20,7 @@ import (
 // A Display represents a connection to a display.
 type Display struct {
 	mu      sync.Mutex // See comment above.
-	conn    *drawfcall.Conn
+	conn    *devdraw.Conn
 	errch   chan<- error
 	bufsize int
 	buf     []byte
@@ -81,7 +81,7 @@ const deffontname = "*default*"
 // are pixels.
 // TODO: Use the error channel.
 func Init(errch chan<- error, fontname, label, winsize string) (*Display, error) {
-	c, err := drawfcall.New()
+	c, err := devdraw.New()
 	if err != nil {
 		return nil, err
 	}

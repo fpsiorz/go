@@ -1,9 +1,11 @@
-package drawfcall
+package devdraw
 
 import (
 	"fmt"
 	"image"
 	"io"
+
+	"9fans.net/go/draw/conn"
 )
 
 const (
@@ -43,9 +45,9 @@ const MAXMSG = 4 << 20
 type Msg struct {
 	Type    uint8
 	Tag     uint8
-	Mouse   Mouse
+	Mouse   conn.Mouse
 	Resized bool
-	Cursor  Cursor
+	Cursor  conn.Cursor
 	Arrow   bool
 	Rune    rune
 	Winsize string
@@ -55,18 +57,6 @@ type Msg struct {
 	Data    []byte
 	Count   int
 	Rect    image.Rectangle
-}
-
-type Mouse struct {
-	image.Point
-	Buttons int
-	Msec    int
-}
-
-type Cursor struct {
-	image.Point
-	Clr [32]byte
-	Set [32]byte
 }
 
 func stringsize(s string) int {
