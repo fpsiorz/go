@@ -86,6 +86,10 @@ func Init(errch chan<- error, fontname, label, winsize string) (*Display, error)
 	if err != nil {
 		return nil, err
 	}
+	return InitConn(c, errch, fontname, label, winsize)
+}
+
+func InitConn(c conn.Interface, errch chan<- error, fontname, label, winsize string) (*Display, error) {
 	d := &Display{
 		conn:    c,
 		errch:   errch,
