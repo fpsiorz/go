@@ -35,8 +35,10 @@ func (c *Conn) Init(label, winsize string) error {
 	return ErrNotImplemented
 }
 
-func (c *Conn) Label(label string) error       { return ioutil.WriteFile("/dev/label", []byte(label), 0) }
-func (c *Conn) MoveTo(p image.Point) error     { return ErrNotImplemented }
+func (c *Conn) Label(label string) error { return ioutil.WriteFile("/dev/label", []byte(label), 0) }
+func (c *Conn) MoveTo(p image.Point) error {
+	io.Fprint(c.Mouse, "m %d %d", p.X, p.Y)
+}
 func (c *Conn) ReadDraw(b []byte) (int, error) { return c.Draw.Read(b) }
 func (c *Conn) ReadKbd() (r rune, err error) {
 	r, _, err = c.Keyboard.ReadRune()
@@ -62,11 +64,14 @@ func (c *Conn) ReadMouse() (m conn.Mouse, resized bool, err error) {
 	}
 
 }
-func (c *Conn) ReadSnarf(b []byte) (int, int, error) { return 0, 0, ErrNotImplemented }
-func (c *Conn) Resize(r image.Rectangle) error       { return ErrNotImplemented }
-func (c *Conn) Top() error                           { return ErrNotImplemented }
-func (c *Conn) WriteDraw(b []byte) (int, error)      { return c.Draw.Write(b) }
-func (c *Conn) WriteSnarf(snarf []byte) error        { return ioutil.WriteFile("/dev/snarf", snarf, 0) }
+func (c *Conn) ReadSnarf(b []byte) (int, int, error) {
+	data, err := ioutil.ReadFile("/dev/snarf")
+	return copy(b, data), len(data), err
+}
+func (c *Conn) Resize(r image.Rectangle) error  { return ErrNotImplemented }
+func (c *Conn) Top() error                      { return ErrNotImplemented }
+func (c *Conn) WriteDraw(b []byte) (int, error) { return c.Draw.Write(b) }
+func (c *Conn) WriteSnarf(snarf []byte) error   { return ioutil.WriteFile("/dev/snarf", snarf, 0) }
 func atoi(b []byte) int {
 	i := 0
 	for i < len(b) && b[i] == ' ' {
